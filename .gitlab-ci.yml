@@ -18,7 +18,6 @@ variables:
 stages:
   - test
   - build
-  #- pull
   - .deploy
   - deploy_dev
   - deploy_staging
@@ -106,14 +105,7 @@ push_image:
     - docker push $IMAGE_NAME:$VERSION
 
 
-#pull_image:
-  #stage: pull
-  #tags:
-  #  - shellrun
-  #before_script: 
-  #  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD registry.gitlab.com  
-  #script:
-  #  - docker pull  $CI_REGISTRY_IMAGE:1.0  
+
 
 .deploy:
   dependencies:
@@ -134,7 +126,6 @@ push_image:
       docker-compose -f docker-compose.yaml down &&
       docker-compose -f docker-compose.yaml up -d
     #- sleep 30
-    #- docker-compose -f docker-compose.yaml down  
   environment:
     name: $DEPLOY_ENV
   variables:
@@ -184,29 +175,6 @@ deploy_to_prod:
 
 
 
-    #SERVER_HOST:
-  #stage: deploy
-  #dependencies:
-  #  - build_image
-  #tags:
-  # - shellrun
-  #before_script:
-  #  - export VERSION=$(cat version_file.txt)  
-  #script:
-  #  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY &&
-   #   export DC_IMAGE_NAME=$IMAGE_NAME &&
-  #    export DC_IMAGE_TAG=$VERSION &&
-  #    export DC_APP_PORT=3200 &&
-  #    docker-compose -f docker-compose.yaml down &&
-  #    docker-compose -f docker-compose.yaml up -d
-    #- sleep 30
-    #- docker-compose -f docker-compose.yaml down
-
-#test_dev:
-  #stage: deploy
-  #dependencies: []
-  #script:
-  #  - echo "testing"
 
 
 
